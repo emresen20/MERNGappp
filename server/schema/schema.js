@@ -18,7 +18,13 @@ const KursType=new GraphQLObjectType({
         id:{type:GraphQLID},
         isim:{type:GraphQLString},
         aciklama:{type:GraphQLString},
-        durum:{type:GraphQLString}
+        durum:{type:GraphQLString},
+        egitmen:{ // burada kurslardaki id ile egitmenin idsini eşliyoruz
+            type:EgitmenType,
+            resolve(parent,args){
+                return egitmenler.find(egitmen=>egitmen.id===parent.egitmenId)
+            }
+        }
     })
 })
 
