@@ -1,5 +1,5 @@
 
-const {GraphQLObjectType,GraphQLID,GraphQLString,GraphQLSchema}= require('graphql')
+const {GraphQLObjectType,GraphQLID,GraphQLString,GraphQLSchema,GraphQLList}= require('graphql')
 
 const {kurslar,egitmenler}=require('../ornekveri')
 
@@ -25,6 +25,12 @@ const RootQuery = new GraphQLObjectType({
           return egitmenler.find((egitmen) => egitmen.id === id);
         },
       },
+      egitmenler:{
+        type:new GraphQLList(EgitmenType),
+        resolve(parent,args){
+            return egitmenler
+        }
+      }
     },
   });
   
