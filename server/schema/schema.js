@@ -1,6 +1,6 @@
 
 const {GraphQLObjectType,GraphQLID,GraphQLString,GraphQLSchema,GraphQLList}= require('graphql')
-
+///denemepush
 const {kurslar,egitmenler}=require('../ornekveri')
 
 const EgitmenType=new GraphQLObjectType({
