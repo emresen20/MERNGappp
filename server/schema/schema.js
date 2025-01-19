@@ -1,4 +1,4 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList,GraphQLNonNull } = require('graphql');
+const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList,GraphQLNonNull,GraphQLEnumType } = require('graphql');
 const Kurs = require('../models/Kurs');
 const Egitmen = require('../models/Egitmen');
 
@@ -88,6 +88,43 @@ const RootMutation=new GraphQLObjectType({
       },
       resolve(parent,args){
         return Egitmen.findByIdAndDelete(args.id)
+      }
+    },
+    kursEkle:{
+      type:KursType,
+      args:{
+        isim:{type:GraphQLNonNull(GraphQLString)},
+        aciklama:{type:GraphQLNonNull(GraphQLString)},
+        durum:{
+          type: new GraphQLEnumType({
+            name:'KursDurumlar',
+            values:{
+              'yayin':{value:'yayında'},
+              'olus':{value:'olusturuluyor'},
+              'plan':{value:'planlanıyor'}
+            }
+          }),
+          defaultValue:'planlanıyor'
+        },
+        egitmenId:{type:GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parent,args){
+        const kurs= new Kurs({
+          isim:args.isim,
+          aciklama:args.aciklama,
+          durum:args.durum,
+          egitmenId:args.egitmenId
+        })
+        return kurs.save()
+      }
+    },
+    kurSil:{
+      type:KursType,
+      args:{
+        id:{type: GraphQLNonNull(GraphQLID)}
+      },
+      resolve(parent,args){
+        return Kurs.findByIdAndDelete(args.id)
       }
     }
   }
