@@ -126,6 +126,33 @@ const RootMutation=new GraphQLObjectType({
       resolve(parent,args){
         return Kurs.findByIdAndDelete(args.id)
       }
+    },
+    kursGuncelle:{
+      type:KursType,
+      args:{
+        id:{type: GraphQLNonNull(GraphQLID)},
+        isim:{type: GraphQLString},
+        aciklama:{type:GraphQLString},
+        durum:{
+          type: new GraphQLEnumType({
+            name:'KursGuncellemeDurumlar',
+            values:{
+              'yayin':{value:'yayında'},
+              'olus':{value:'olusturuluyor'},
+              'plan':{value:'planlanıyor'}
+            }
+          })
+        }
+      },
+      resolve(parent,args){
+        return Kurs.findByIdAndUpdate(args.id,{
+          $set:{
+            isim:args.isim,
+            aciklama:args.aciklama,
+            durum:args.durum
+          }
+        },{new:true})
+      }
     }
   }
 })
